@@ -20,6 +20,7 @@ public class Usuario implements Serializable {
     private Date dataNascimento;
 
     public Usuario() {
+        
     }
 
     public Integer getId() {
