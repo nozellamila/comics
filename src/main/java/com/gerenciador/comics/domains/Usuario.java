@@ -2,7 +2,9 @@ package com.gerenciador.comics.domains;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,8 +21,15 @@ public class Usuario implements Serializable {
     private String cpf;
     private Date dataNascimento;
 
+    @ManyToMany(mappedBy = "usuarios", cascade = CascadeType.ALL)
+    private List<Comics> comics = new ArrayList<Comics>();
+
     public Usuario() {
         
+    }
+
+    public List<Comics> getComics() {
+        return comics;
     }
 
     public Integer getId() {
@@ -61,6 +70,10 @@ public class Usuario implements Serializable {
 
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public void setComics(List<Comics> comics) {
+        this.comics = comics;
     }
 
     @Override
