@@ -1,2 +1,77 @@
-package com.gerenciador.comics.domains;public class Usuario {
+package com.gerenciador.comics.domains;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+
+@Entity
+public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String nome;
+    @Column(unique = true)
+    private String email;
+    @Column(unique = true)
+    private String cpf;
+    private Date dataNascimento;
+
+    public Usuario() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Usuario)) return false;
+        Usuario usuario = (Usuario) o;
+        return getId().equals(usuario.getId()) && getNome().equals(usuario.getNome()) && getEmail().equals(usuario.getEmail()) && getCpf().equals(usuario.getCpf()) && getDataNascimento().equals(usuario.getDataNascimento());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getNome(), getEmail(), getCpf(), getDataNascimento());
+    }
 }
