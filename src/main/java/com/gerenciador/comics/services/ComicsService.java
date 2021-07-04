@@ -35,31 +35,48 @@ public class ComicsService {
     @Autowired
     private ComicsRepository comicsRepository;
 
-    public ComicResponse findComicById(String comicId) {
+    public ResponseEntity<ComicResponse> findComicById(String comicId) {
         Long timeStamp = new Date().getTime();
 
         return client.getById(comicId, timeStamp, PUBLIC_KEY, buildHash(timeStamp));
     }
+
     public ResponseEntity<ComicResponse> postComicForUser(ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
         Comics comic;
         Optional<Usuario> usuario = usuarioRepository.findById(comicForm.getUsuarioId());
 
+        ResponseEntity<ComicResponse> comicResponseResponseEntity;
+
         if (!usuario.isPresent())
             throw new ServiceException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
 
+        try {
+            comicResponseResponseEntity = findComicById(comicForm.getComicId().toString());
+        }catch (Exception e){
+            throw new ServiceException(HttpStatus.NOT_FOUND, "Comic da Marvel não encontrado");
+        }
 
-        ComicResponse comicResponse = findComicById(comicForm.getComicId().toString());
+        Optional<Comics> comicByUsuario = comicsRepository.findByUsuarios(usuario.get());
+        if (comicByUsuario.isPresent())
+            throw new ServiceException(HttpStatus.CONFLICT, "Comic já existe para o usuário");
 
-        comic = toComic(comicResponse);
+        Optional<Comics> optionalComics = comicsRepository.findByComicId(comicForm.getComicId());
 
-        comic.setUsuarios(Arrays.asList(usuario.get()));
+        if (optionalComics.isPresent()){
+            comic = optionalComics.get();
+            comic.setUsuarios(Arrays.asList(usuario.get()));
+            usuario.get().setComics(Arrays.asList(comic));
+        }else {
+            comic = toComic(comicResponseResponseEntity.getBody());
+            comic.setUsuarios(Arrays.asList(usuario.get()));
 
-        comicsRepository.save(comic);
+            comicsRepository.save(comic);
 
-        usuario.get().setComics(Arrays.asList(comic));
+            usuario.get().setComics(Arrays.asList(comic));
+        }
 
         URI uri = builder.path("/comics/{id}").buildAndExpand(comic.getId()).toUri();
-        return ResponseEntity.created(uri).body(comicResponse);
+        return ResponseEntity.created(uri).body(comicResponseResponseEntity.getBody());
     }
 
     private String buildHash(Long timeStamp) {

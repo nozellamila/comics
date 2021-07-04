@@ -2,6 +2,7 @@ package com.gerenciador.comics.client;
 
 import com.gerenciador.comics.resources.response.ComicResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ComicsClient {
 
     @GetMapping("/comics/{comicId}")
-    public ComicResponse getById(@PathVariable String comicId, @RequestParam(value = "ts") Long timeStamp,
-                                 @RequestParam(value = "apikey") String publicKey, @RequestParam(value = "hash") String hashMD5);
+    public ResponseEntity<ComicResponse> getById(@PathVariable String comicId, @RequestParam(value = "ts") Long timeStamp,
+                                                @RequestParam(value = "apikey") String publicKey, @RequestParam(value = "hash") String hashMD5);
 
 }

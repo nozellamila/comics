@@ -20,6 +20,7 @@ public class ComicsResource {
     @Autowired
     private ComicsService comicService;
 
+    @Transactional
     @PostMapping
     public ResponseEntity<ComicResponse> postComicForUser(@RequestBody @Valid ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
         return comicService.postComicForUser(comicForm, builder);
