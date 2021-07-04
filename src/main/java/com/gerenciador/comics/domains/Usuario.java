@@ -1,5 +1,7 @@
 package com.gerenciador.comics.domains;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class Usuario implements Serializable {
     private String email;
     @Column(unique = true)
     private String cpf;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date dataNascimento;
 
     @ManyToMany(mappedBy = "usuarios", cascade = CascadeType.ALL)

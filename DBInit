@@ -1,0 +1,7 @@
+INSERT INTO USUARIO VALUES (1, '13112403657', '2021-07-03', 'nozellamila@gmail.com', 'Mila');
+
+INSERT INTO COMICS VALUES (1, 'comic 1', '123', 23.00, 'Titulo comic 1');
+INSERT INTO COMICS VALUES (2, 'comic 2', '1234', 23.00, 'Titulo comic 2');
+
+INSERT INTO COMIC_USUARIO VALUES (1, 1);
+INSERT INTO COMIC_USUARIO VALUES (2, 1);
