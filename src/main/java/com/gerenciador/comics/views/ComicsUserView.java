@@ -1,35 +1,12 @@
 package com.gerenciador.comics.views;
 
-import com.gerenciador.comics.domains.Comics;
-
-public class ComicView {
-    private Integer id;
+public class ComicsUserView {
     private Integer comicId;
     private String titulo;
     private Float preco;
     private String isbn;
     private String descricao;
-    private Integer usuarioId;
-
-    public ComicView(){}
-
-    public ComicView(Comics comics, Integer usuarioId){
-        this.id = comics.getId();
-        this.comicId = comics.getComicId();
-        this.titulo = comics.getTitulo();
-        this.preco = comics.getPreco();
-        this.isbn = comics.getIsbn();
-        this.descricao = comics.getDescricao();
-        this.usuarioId = usuarioId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private boolean descontoAtivo;
 
     public Integer getComicId() {
         return comicId;
@@ -71,11 +48,11 @@ public class ComicView {
         this.descricao = descricao;
     }
 
-    public Integer getUsuarioId() {
-        return usuarioId;
+    public boolean isDescontoAtivo() {
+        return descontoAtivo;
     }
 
-    public void setUsuarioId(Integer usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setDescontoAtivo(boolean descontoAtivo) {
+        this.descontoAtivo = descontoAtivo;
     }
 }

@@ -1,17 +1,16 @@
 package com.gerenciador.comics.services;
 
-import ch.qos.logback.core.pattern.parser.OptionTokenizer;
 import com.gerenciador.comics.client.ComicsClient;
 import com.gerenciador.comics.domains.Comics;
 import com.gerenciador.comics.domains.Usuario;
 import com.gerenciador.comics.forms.ComicForm;
-import com.gerenciador.comics.forms.UsuarioForm;
 import com.gerenciador.comics.repositories.ComicsRepository;
 import com.gerenciador.comics.repositories.UsuarioRepository;
 import com.gerenciador.comics.resources.response.ComicResponse;
 import com.gerenciador.comics.services.exceptions.ServiceException;
 import com.gerenciador.comics.views.ComicView;
-import org.modelmapper.ModelMapper;
+import com.gerenciador.comics.views.ComicsUserView;
+import com.gerenciador.comics.views.UsuarioComicsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +19,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class ComicsService {
@@ -58,10 +56,6 @@ public class ComicsService {
             throw new ServiceException(HttpStatus.NOT_FOUND, "Comic da Marvel não encontrado");
         }
 
-        Optional<Comics> comicByUsuario = comicsRepository.findByUsuarios(usuario.get());
-        if (comicByUsuario.isPresent())
-            throw new ServiceException(HttpStatus.CONFLICT, "Comic já existe para o usuário");
-
         Optional<Comics> optionalComics = comicsRepository.findByComicId(comicForm.getComicId());
 
         if (optionalComics.isPresent()){
@@ -88,6 +82,53 @@ public class ComicsService {
         return ResponseEntity.created(uri).body(new ComicView(comic, comicForm.getUsuarioId()));
     }
 
+    public ResponseEntity<UsuarioComicsView> getComicsDoUsuario(Integer usuarioId) throws ServiceException {
+        //Pegar os comics cadastrados
+        //Dia de desconto, se o isbn for vazio, nao tem desconto
+        //Desconto ativo: se for o dia de desconto fica ativo
+        //Se o desconto estiver ativo, o preço deve ser 10% menor. Se o preço for 0, nao deve dar 10%
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
+        UsuarioComicsView usuarioComicsView = new UsuarioComicsView();
+        List<ComicsUserView> comicsUserViewList = new ArrayList<>();
+
+        if(!optionalUsuario.isPresent())
+            throw new ServiceException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+
+        Usuario usuario = optionalUsuario.get();
+
+        if(usuario.getComics().isEmpty())
+            usuarioComicsView.setComicList(comicsUserViewList);
+        else {
+            DayOfWeek diaDaSemana = LocalDate.now().getDayOfWeek();
+
+            usuario.getComics().forEach(comics -> {
+                ComicsUserView comicsUserView;
+                comicsUserView = preencheComicsUserView(comics);
+
+                String isbn = comics.getIsbn();
+                String ultimoDigito;
+                DayOfWeek diaDeDesconto;
+
+                if (!isbn.isEmpty()){
+                    ultimoDigito = isbn.substring(12);
+                    diaDeDesconto = getDiaDeDesconto(ultimoDigito);
+
+                    if (diaDeDesconto == diaDaSemana){
+                        comicsUserView.setDescontoAtivo(true);
+                        Float precoComDesconto = calculaDesconto(comicsUserView.getPreco());
+                        comicsUserView.setPreco(precoComDesconto);
+                    }
+                }
+                comicsUserViewList.add(comicsUserView);
+            });
+        }
+
+        usuarioComicsView.setUsuarioId(usuarioId);
+        usuarioComicsView.setComicList(comicsUserViewList);
+
+        return new ResponseEntity<UsuarioComicsView>(usuarioComicsView, HttpStatus.OK);
+    }
+
     private String buildHash(Long timeStamp) {
 
         return DigestUtils.md5Hex(timeStamp + PRIVATE_KEY + PUBLIC_KEY);
@@ -103,4 +144,36 @@ public class ComicsService {
         return comics;
     }
 
+    private ComicsUserView preencheComicsUserView(Comics comics){
+        ComicsUserView comicsUserView = new ComicsUserView();
+
+        comicsUserView.setComicId(comics.getComicId());
+        comicsUserView.setTitulo(comics.getTitulo());
+        comicsUserView.setPreco(comics.getPreco());
+        comicsUserView.setIsbn(comics.getIsbn());
+        comicsUserView.setDescricao(comics.getDescricao());
+        comicsUserView.setDescontoAtivo(false);
+
+        return comicsUserView;
+    }
+    private DayOfWeek getDiaDeDesconto(String ultimoDigito){
+        if(ultimoDigito.equals("0") || ultimoDigito.equals("1"))
+            return DayOfWeek.MONDAY;
+        else if(ultimoDigito.equals("2") || ultimoDigito.equals("3"))
+            return DayOfWeek.TUESDAY;
+        else if(ultimoDigito.equals("4") || ultimoDigito.equals("5"))
+            return DayOfWeek.WEDNESDAY;
+        else if(ultimoDigito.equals("6") || ultimoDigito.equals("7"))
+            return DayOfWeek.THURSDAY;
+        else if(ultimoDigito.equals("8") || ultimoDigito.equals("9"))
+            return DayOfWeek.FRIDAY;
+        else return null;
+    }
+
+    private Float calculaDesconto(Float preco){
+        if(preco == 0)
+            return preco;
+        else
+            return preco = preco - (0.10f*preco);
+    }
 }
