@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,15 +65,22 @@ public class ComicsService {
 
         if (optionalComics.isPresent()){
             comic = optionalComics.get();
-            comic.setUsuarios(Arrays.asList(usuario.get()));
-            usuario.get().setComics(Arrays.asList(comic));
+            List<Usuario> usuarios = comic.getUsuarios();
+            usuarios.add(usuario.get());
+            comic.setUsuarios(usuarios);
+
+            List<Comics> comics = usuario.get().getComics();
+            comics.add(comic);
+            usuario.get().setComics(comics);
         }else {
             comic = toComic(comicResponseResponseEntity.getBody());
             comic.setUsuarios(Arrays.asList(usuario.get()));
 
             comicsRepository.save(comic);
 
-            usuario.get().setComics(Arrays.asList(comic));
+            List<Comics> comics = usuario.get().getComics();
+            comics.add(comic);
+            usuario.get().setComics(comics);
         }
 
         URI uri = builder.path("/comics/{id}").buildAndExpand(comic.getId()).toUri();
