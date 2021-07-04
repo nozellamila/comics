@@ -1,8 +1,7 @@
 package com.gerenciador.comics.services;
 
 import com.gerenciador.comics.client.ComicsClient;
-import com.gerenciador.comics.resources.response.ComicIdResponse;
-import com.gerenciador.comics.resources.response.ComicsResponse;
+import com.gerenciador.comics.resources.response.ComicResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -17,24 +16,16 @@ public class ComicsService {
     @Autowired
     private ComicsClient client;
 
-    public ComicsResponse findAll() {
-        Long timeStamp = new Date().getTime();
-        System.out.println(timeStamp);
-        System.out.println(PUBLIC_KEY);
-        System.out.println(buildHash(timeStamp));
-        return client.getAll(timeStamp, PUBLIC_KEY, buildHash(timeStamp));
-    }
-
-    private String buildHash(Long timeStamp) {
-
-        return DigestUtils.md5Hex(timeStamp + PRIVATE_KEY + PUBLIC_KEY);
-    }
-
-    public ComicIdResponse findById(String comicId) {
+    public ComicResponse findById(String comicId) {
         Long timeStamp = new Date().getTime();
         System.out.println(timeStamp);
         System.out.println(PUBLIC_KEY);
         System.out.println(buildHash(timeStamp));
         return client.getById(comicId, timeStamp, PUBLIC_KEY, buildHash(timeStamp));
+    }
+
+    private String buildHash(Long timeStamp) {
+
+        return DigestUtils.md5Hex(timeStamp + PRIVATE_KEY + PUBLIC_KEY);
     }
 }

@@ -1,7 +1,6 @@
 package com.gerenciador.comics.resources;
 
-import com.gerenciador.comics.resources.response.ComicIdResponse;
-import com.gerenciador.comics.resources.response.ComicsResponse;
+import com.gerenciador.comics.resources.response.ComicResponse;
 import com.gerenciador.comics.services.ComicsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +15,8 @@ public class ComicsResource {
     private ComicsService service;
 
     @ResponseStatus(OK)
-    @GetMapping
-    public ComicsResponse findAll() {
-        return service.findAll();
-    }
-
-    @ResponseStatus(OK)
     @GetMapping("/{comicId}")
-    public ComicIdResponse findById(@PathVariable String comicId) {
+    public ComicResponse findById(@PathVariable String comicId) {
         return service.findById(comicId);
     }
 }
