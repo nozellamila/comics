@@ -10,6 +10,7 @@ import com.gerenciador.comics.repositories.ComicsRepository;
 import com.gerenciador.comics.repositories.UsuarioRepository;
 import com.gerenciador.comics.resources.response.ComicResponse;
 import com.gerenciador.comics.services.exceptions.ServiceException;
+import com.gerenciador.comics.views.ComicView;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class ComicsService {
         return client.getById(comicId, timeStamp, PUBLIC_KEY, buildHash(timeStamp));
     }
 
-    public ResponseEntity<ComicResponse> postComicForUser(ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
+    public ResponseEntity<ComicView> postComicForUser(ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
         Comics comic;
         Optional<Usuario> usuario = usuarioRepository.findById(comicForm.getUsuarioId());
 
@@ -84,7 +85,7 @@ public class ComicsService {
         }
 
         URI uri = builder.path("/comics/{id}").buildAndExpand(comic.getId()).toUri();
-        return ResponseEntity.created(uri).body(comicResponseResponseEntity.getBody());
+        return ResponseEntity.created(uri).body(new ComicView(comic, comicForm.getUsuarioId()));
     }
 
     private String buildHash(Long timeStamp) {

@@ -5,6 +5,7 @@ import com.gerenciador.comics.forms.UsuarioForm;
 import com.gerenciador.comics.resources.response.ComicResponse;
 import com.gerenciador.comics.services.ComicsService;
 import com.gerenciador.comics.services.exceptions.ServiceException;
+import com.gerenciador.comics.views.ComicView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ComicsResource {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<ComicResponse> postComicForUser(@RequestBody @Valid ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
+    public ResponseEntity<ComicView> postComicForUser(@RequestBody @Valid ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
         return comicService.postComicForUser(comicForm, builder);
     }
 }

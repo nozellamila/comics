@@ -4,6 +4,7 @@ import com.gerenciador.comics.domains.Usuario;
 import com.gerenciador.comics.forms.UsuarioForm;
 import com.gerenciador.comics.repositories.UsuarioRepository;
 import com.gerenciador.comics.services.exceptions.ServiceException;
+import com.gerenciador.comics.views.UsuarioView;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public ResponseEntity<UsuarioForm> postUsuario(UsuarioForm usuarioForm, UriComponentsBuilder builder) throws ServiceException {
+    public ResponseEntity<UsuarioView> postUsuario(UsuarioForm usuarioForm, UriComponentsBuilder builder) throws ServiceException {
         Usuario usuario;
 
         Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(usuarioForm.getEmail());
@@ -38,6 +39,6 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
 
         URI uri = builder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
-        return ResponseEntity.created(uri).body(new UsuarioForm(usuario));
+        return ResponseEntity.created(uri).body(new UsuarioView(usuario));
     }
 }
