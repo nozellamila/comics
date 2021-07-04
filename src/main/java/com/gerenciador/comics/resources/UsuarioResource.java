@@ -2,6 +2,7 @@ package com.gerenciador.comics.resources;
 
 import com.gerenciador.comics.forms.UsuarioForm;
 import com.gerenciador.comics.services.UsuarioService;
+import com.gerenciador.comics.services.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class UsuarioResource {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<UsuarioForm> postUsuario(@RequestBody @Valid UsuarioForm usuarioForm, UriComponentsBuilder builder){
+    public ResponseEntity<UsuarioForm> postUsuario(@RequestBody @Valid UsuarioForm usuarioForm, UriComponentsBuilder builder) throws ServiceException {
         return usuarioService.postUsuario(usuarioForm, builder);
     }
 }

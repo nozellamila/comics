@@ -5,3 +5,9 @@ INSERT INTO COMICS VALUES (2, 'comic 2', '1234', 23.00, 'Titulo comic 2');
 
 INSERT INTO COMIC_USUARIO VALUES (1, 1);
 INSERT INTO COMIC_USUARIO VALUES (2, 1);
+
+Comic com descrição, isbn final 3 (0-7851-1451-3), preço 5.99: 1308
+Comic com descrição, isbn final 8 (0-7851-1129-8), preço 9.99: 1158
+Comic com descrição, isbn final 1 (0-7851-0799-1), preço 9.99: 1003
+Comic sem descrição (null), sem isbn, preço 0: 82970
+Comic com descrição, sem isbn, preço 3.99: 1689

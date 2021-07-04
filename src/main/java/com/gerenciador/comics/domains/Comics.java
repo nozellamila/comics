@@ -12,11 +12,12 @@ public class Comics implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comic_id")
     private Integer id;
+    private Integer comicId;
     private String titulo;
     private Float preco;
     private String isbn;
+    @Column(length = 1337)
     private String descricao;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -35,6 +36,14 @@ public class Comics implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getComicId() {
+        return comicId;
+    }
+
+    public void setComicId(Integer comicId) {
+        this.comicId = comicId;
     }
 
     public String getTitulo() {
@@ -82,11 +91,11 @@ public class Comics implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Comics)) return false;
         Comics comics = (Comics) o;
-        return Objects.equals(getId(), comics.getId()) && Objects.equals(getTitulo(), comics.getTitulo()) && Objects.equals(getPreco(), comics.getPreco()) && Objects.equals(getIsbn(), comics.getIsbn()) && Objects.equals(getDescricao(), comics.getDescricao()) && Objects.equals(getUsuarios(), comics.getUsuarios());
+        return Objects.equals(getId(), comics.getId()) && Objects.equals(getComicId(), comics.getComicId()) && Objects.equals(getTitulo(), comics.getTitulo()) && Objects.equals(getPreco(), comics.getPreco()) && Objects.equals(getIsbn(), comics.getIsbn()) && Objects.equals(getDescricao(), comics.getDescricao()) && Objects.equals(getUsuarios(), comics.getUsuarios());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitulo(), getPreco(), getIsbn(), getDescricao(), getUsuarios());
+        return Objects.hash(getId(), getComicId(), getTitulo(), getPreco(), getIsbn(), getDescricao(), getUsuarios());
     }
 }
