@@ -4,6 +4,7 @@ public class ComicsUserView {
     private Integer comicId;
     private String titulo;
     private Float preco;
+    private Float precoComDesconto;
     private String isbn;
     private String descricao;
     private boolean descontoAtivo;
@@ -30,6 +31,14 @@ public class ComicsUserView {
 
     public void setPreco(Float preco) {
         this.preco = preco;
+    }
+
+    public Float getPrecoComDesconto() {
+        return precoComDesconto;
+    }
+
+    public void setPrecoComDesconto(Float precoComDesconto) {
+        this.precoComDesconto = precoComDesconto;
     }
 
     public String getIsbn() {

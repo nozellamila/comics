@@ -12,4 +12,12 @@ public interface ComicsRepository extends JpaRepository<Comics, Integer> {
     Optional<Comics> findByComicId(Integer comicId);
 
     Optional<Comics> findByUsuarios(Usuario usuario);
+
+    @Query(nativeQuery = true, value ="SELECT c.id FROM Comics c " +
+            "INNER JOIN Comic_Usuario cu " +
+            "ON c.id = cu.comic_id " +
+            "WHERE (cu.usuario_id = :usuarioId) " +
+            "AND (c.comic_id = :comicId)")
+    Comics findByQuery(@Param("usuarioId") Integer usuarioId,
+                       @Param("comicId") Integer comicId);
 }

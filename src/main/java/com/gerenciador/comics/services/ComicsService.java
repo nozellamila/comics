@@ -43,11 +43,13 @@ public class ComicsService {
 
     public ResponseEntity<ComicView> postComicForUser(ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
         Comics comic;
-        Optional<Usuario> usuario = usuarioRepository.findById(comicForm.getUsuarioId());
+        Usuario usuario;
+
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(comicForm.getUsuarioId());
 
         ResponseEntity<ComicResponse> comicResponseResponseEntity;
 
-        if (!usuario.isPresent())
+        if (!optionalUsuario.isPresent())
             throw new ServiceException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
 
         try {
@@ -55,27 +57,32 @@ public class ComicsService {
         }catch (Exception e){
             throw new ServiceException(HttpStatus.NOT_FOUND, "Comic da Marvel não encontrado");
         }
-
+        usuario = optionalUsuario.get();
         Optional<Comics> optionalComics = comicsRepository.findByComicId(comicForm.getComicId());
 
         if (optionalComics.isPresent()){
             comic = optionalComics.get();
+
+            Comics comicByUsuario = comicsRepository.findByQuery(usuario.getId(), comic.getComicId());
+            if (comicByUsuario != null)
+                throw new ServiceException(HttpStatus.CONFLICT, "Comic já existe para o usuário");
+
             List<Usuario> usuarios = comic.getUsuarios();
-            usuarios.add(usuario.get());
+            usuarios.add(usuario);
             comic.setUsuarios(usuarios);
 
-            List<Comics> comics = usuario.get().getComics();
+            List<Comics> comics = usuario.getComics();
             comics.add(comic);
-            usuario.get().setComics(comics);
+            usuario.setComics(comics);
         }else {
             comic = toComic(comicResponseResponseEntity.getBody());
-            comic.setUsuarios(Arrays.asList(usuario.get()));
+            comic.setUsuarios(Arrays.asList(usuario));
 
             comicsRepository.save(comic);
 
-            List<Comics> comics = usuario.get().getComics();
+            List<Comics> comics = usuario.getComics();
             comics.add(comic);
-            usuario.get().setComics(comics);
+            usuario.setComics(comics);
         }
 
         URI uri = builder.path("/comics/{id}").buildAndExpand(comic.getId()).toUri();
@@ -116,7 +123,7 @@ public class ComicsService {
                     if (diaDeDesconto == diaDaSemana){
                         comicsUserView.setDescontoAtivo(true);
                         Float precoComDesconto = calculaDesconto(comicsUserView.getPreco());
-                        comicsUserView.setPreco(precoComDesconto);
+                        comicsUserView.setPrecoComDesconto(precoComDesconto);
                     }
                 }
                 comicsUserViewList.add(comicsUserView);
@@ -150,6 +157,7 @@ public class ComicsService {
         comicsUserView.setComicId(comics.getComicId());
         comicsUserView.setTitulo(comics.getTitulo());
         comicsUserView.setPreco(comics.getPreco());
+        comicsUserView.setPrecoComDesconto(comics.getPreco());
         comicsUserView.setIsbn(comics.getIsbn());
         comicsUserView.setDescricao(comics.getDescricao());
         comicsUserView.setDescontoAtivo(false);
