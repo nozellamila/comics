@@ -90,10 +90,6 @@ public class ComicsService {
     }
 
     public ResponseEntity<UsuarioComicsView> getComicsDoUsuario(Integer usuarioId) throws ServiceException {
-        //Pegar os comics cadastrados
-        //Dia de desconto, se o isbn for vazio, nao tem desconto
-        //Desconto ativo: se for o dia de desconto fica ativo
-        //Se o desconto estiver ativo, o preço deve ser 10% menor. Se o preço for 0, nao deve dar 10%
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
         UsuarioComicsView usuarioComicsView = new UsuarioComicsView();
         List<ComicsUserView> comicsUserViewList = new ArrayList<>();
