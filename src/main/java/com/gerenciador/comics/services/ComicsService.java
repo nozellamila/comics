@@ -119,7 +119,7 @@ public class ComicsService {
                     if (diaDeDesconto == diaDaSemana){
                         comicsUserView.setDescontoAtivo(true);
                         Float precoComDesconto = calculaDesconto(comicsUserView.getPreco());
-                        comicsUserView.setPrecoComDesconto(precoComDesconto);
+                        comicsUserView.setPreco(precoComDesconto);
                     }
                 }
                 comicsUserViewList.add(comicsUserView);
@@ -153,7 +153,6 @@ public class ComicsService {
         comicsUserView.setComicId(comics.getComicId());
         comicsUserView.setTitulo(comics.getTitulo());
         comicsUserView.setPreco(comics.getPreco());
-        comicsUserView.setPrecoComDesconto(comics.getPreco());
         comicsUserView.setIsbn(comics.getIsbn());
         comicsUserView.setDescricao(comics.getDescricao());
         comicsUserView.setDescontoAtivo(false);
