@@ -12,7 +12,7 @@ Ele possui três endpoints: cadastro de usuário, cadastro de comics da Marvel e
 
 Para a organização do projeto utilizamos uma arquitetura em camadas:
 
-![Arquitetura em camadas](https://media.vlpt.us/images/woo00oo/post/632e3dfb-5fa7-40da-93d9-8666e77c883c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-01-30%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%208.03.57.png)
+<img width="767" alt="camadas" src="https://user-images.githubusercontent.com/53572999/124838867-10ff0380-df5e-11eb-9a9b-70c2258c438a.png">
 
 Em que:
 
@@ -27,7 +27,7 @@ Para subir o projeto e utilizá-lo localmente você deve clonar o projeto, ou fa
 
 Na sua IDE de preferência, execute o método principal da aplicação, chamado "ComicsApplication". Abaixo um exemplo no IntelliJ:
 
-![Rodar projeto localmente](https://drive.google.com/file/d/1TyM7DNbU-qqZfiCzA8Z0WUs8eVu2xSnZ/view?usp=sharing)
+![rodar spring](https://user-images.githubusercontent.com/53572999/124838912-2d9b3b80-df5e-11eb-927b-e973eb1576f3.png)
 
 # Testar o projeto
 
