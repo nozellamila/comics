@@ -4,19 +4,15 @@ import com.gerenciador.comics.domains.Usuario;
 import com.gerenciador.comics.forms.UsuarioForm;
 import com.gerenciador.comics.repositories.UsuarioRepository;
 import com.gerenciador.comics.services.exceptions.ServiceException;
-import com.gerenciador.comics.views.UsuarioComicsView;
 import com.gerenciador.comics.views.UsuarioView;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service

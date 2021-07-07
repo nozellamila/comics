@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ComicsClient {
 
     @GetMapping("/comics/{comicId}")
-    public ResponseEntity<ComicResponse> getById(@PathVariable String comicId, @RequestParam(value = "ts") Long timeStamp,
-                                                @RequestParam(value = "apikey") String publicKey, @RequestParam(value = "hash") String hashMD5);
-
+    public ResponseEntity<ComicResponse> getById(@PathVariable String comicId,
+                                                 @RequestParam(value = "ts") Long timeStamp,
+                                                 @RequestParam(value = "apikey") String publicKey,
+                                                 @RequestParam(value = "hash") String hashMD5);
 }

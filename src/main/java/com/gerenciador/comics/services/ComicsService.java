@@ -57,6 +57,7 @@ public class ComicsService {
         }catch (Exception e){
             throw new ServiceException(HttpStatus.NOT_FOUND, "Comic da Marvel não encontrado");
         }
+
         usuario = optionalUsuario.get();
         Optional<Comics> optionalComics = comicsRepository.findByComicId(comicForm.getComicId());
 
@@ -139,11 +140,13 @@ public class ComicsService {
 
     private Comics toComic(ComicResponse comicResponse){
         Comics comics = new Comics();
+
         comics.setComicId(comicResponse.getData().getResults().get(0).getId());
         comics.setTitulo(comicResponse.getData().getResults().get(0).getTitle());
         comics.setPreco(comicResponse.getData().getResults().get(0).getPrices().get(0).getPrice());
         comics.setIsbn(comicResponse.getData().getResults().get(0).getIsbn());
         comics.setDescricao(comicResponse.getData().getResults().get(0).getDescription());
+
         return comics;
     }
 
@@ -174,9 +177,6 @@ public class ComicsService {
     }
 
     private Float calculaDesconto(Float preco){
-        if(preco == 0)
-            return preco;
-        else
-            return preco = preco - (0.10f*preco);
+        return preco = preco - (0.10f*preco);
     }
 }

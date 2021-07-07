@@ -27,61 +27,8 @@ public class ResourceExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
-    //Tratamento de restrição de integridade
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Integridade de dados", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<StandardError> invalidDateFormat(HttpMessageNotReadableException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Data inserida é inválida", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-    }
-    //Tratamento de parâmetro faltando
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<StandardError> parameterMissing(MissingServletRequestParameterException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Parâmetro não pode ser nulo", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-    }
-
-    //Tratamento de parâmetro nulo
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<StandardError> parameterNull(IllegalArgumentException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Parâmetro não pode ser nulo", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-    }
-
-    //Tratamento de nullpointer
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<StandardError> nullPointer(NullPointerException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Retorno é nulo! Parâmetro não pode ser nulo", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-    }
-    //Tratamento de objetos não encontrados
-    @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Não encontrado", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
-    }
-
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<StandardError> responseException(ResponseStatusException e, HttpServletRequest request) {
-
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Duplicidade", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-    }
-
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<StandardError> serviceException(ServiceException e, HttpServletRequest request) {
-
         StandardError err = new StandardError( e.getHttpStatus().value(), e.getMessage(), System.currentTimeMillis(), request.getRequestURI());
         return ResponseEntity.status(e.getHttpStatus()).body(err);
     }
@@ -101,5 +48,61 @@ public class ResourceExceptionHandler {
 
         return dto;
     }
+
+    //Tratamento de restrição de integridade
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Integridade de dados", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    //Tratamento de nullpointer
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<StandardError> nullPointer(NullPointerException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Retorno é nulo! Parâmetro não pode ser nulo", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<StandardError> invalidDateFormat(HttpMessageNotReadableException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "", "Data inserida é inválida", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    //Tratamento de parâmetro faltando
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<StandardError> parameterMissing(MissingServletRequestParameterException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Parâmetro não pode ser nulo", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    //Tratamento de parâmetro nulo
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<StandardError> parameterNull(IllegalArgumentException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Parâmetro não pode ser nulo", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    //Tratamento de objetos não encontrados
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Não encontrado", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<StandardError> responseException(ResponseStatusException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Duplicidade", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+
 
 }

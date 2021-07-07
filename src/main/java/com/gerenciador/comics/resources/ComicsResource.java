@@ -24,7 +24,8 @@ public class ComicsResource {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<ComicView> postComicForUser(@RequestBody @Valid ComicForm comicForm, UriComponentsBuilder builder) throws ServiceException {
+    public ResponseEntity<ComicView> postComicForUser(@RequestBody @Valid ComicForm comicForm,
+                                                      UriComponentsBuilder builder) throws ServiceException {
         return comicService.postComicForUser(comicForm, builder);
     }
 

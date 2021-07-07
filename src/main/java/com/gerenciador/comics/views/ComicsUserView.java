@@ -31,7 +31,7 @@ public class ComicsUserView {
     public void setPreco(Float preco) {
         this.preco = preco;
     }
-    
+
     public String getIsbn() {
         return isbn;
     }
